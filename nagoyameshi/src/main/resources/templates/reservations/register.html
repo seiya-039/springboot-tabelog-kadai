@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<!-- Flatpickr -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+	<title>予約</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container nagoyameshi-container pb-5">
+				<div class="row justify-content-center">
+					<div class="col-xxl-6 col-xl-7 col-lg-8 col-md-10">
+						<nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+								<li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
+								<li class="breadcrumb-item"><a
+										th:href="@{/restaurants/__${restaurant.getId()}__}">店舗詳細</a></li>
+								<li class="breadcrumb-item active" aria-current="page">予約</li>
+							</ol>
+						</nav>
+
+						<h1 class="mb-2 text-center" th:text="${restaurant.getName()}"></h1>
+
+						<p class="text-center">
+							<span class="nagoyameshi-star-rating me-1"
+								th:data-rate="${restaurant.getRoundedAverageScore()}"></span>
+							<span th:text="${restaurant.getFormattedAverageScore()}"></span><span
+								th:text="${'（' + restaurant.getReviews().size() + '件）'}"></span>
+						</p>
+
+						<ul class="nav nav-tabs mb-3">
+							<li class="nav-item">
+								<a class="nav-link link-dark"
+									th:href="@{/restaurants/__${restaurant.getId()}__}">トップ</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active text-white nagoyameshi-bg" aria-current="page"
+									th:href="@{/restaurants/__${restaurant.getId()}__/reservations/register}">予約</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link link-dark"
+									th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">レビュー</a>
+							</li>
+						</ul>
+
+						<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reservations/create}"
+							th:object="${reservationRegisterForm}">
+							<div class="form-group row mb-3">
+								<label for="reservationDate"
+									class="col-md-5 col-form-label text-md-left fw-bold">予約日</label>
+
+								<div class="col-md-7">
+									<div th:if="${#fields.hasErrors('reservationDate')}" class="text-danger small mb-2"
+										th:errors="*{reservationDate}"></div>
+									<input type="text" class="form-control" th:field="*{reservationDate}">
+								</div>
+							</div>
+
+							<div class="form-group row mb-3">
+								<label for="reservationTime"
+									class="col-md-5 col-form-label text-md-left fw-bold">時間</label>
+
+								<div class="col-md-7">
+									<div th:if="${#fields.hasErrors('reservationTime')}" class="text-danger small mb-2"
+										th:errors="*{reservationTime}"></div>
+									<select class="form-control form-select" th:field="*{reservationTime}">
+										<option value="" hidden>選択してください</option>
+										<option th:each="optionTime : ${optionTimes}" th:value="${optionTime}"
+											th:selected="${optionTime == reservationRegisterForm.getReservationTime()}"
+											th:text="${#temporals.format(optionTime, 'H:mm')}"></option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="numberOfPeople"
+									class="col-md-5 col-form-label text-md-left fw-bold">人数</label>
+
+								<div class="col-md-7">
+									<div th:if="${#fields.hasErrors('numberOfPeople')}" class="text-danger small mb-2"
+										th:errors="*{numberOfPeople}"></div>
+									<select class="form-control form-select" th:field="*{numberOfPeople}">
+										<option value="" hidden>選択してください</option>
+										<th:block th:each="i : ${#numbers.sequence(1, 50)}">
+											<option th:value="${i}"
+												th:selected="${i == reservationRegisterForm.getNumberOfPeople()}"
+												th:text="${i + '名'}"></option>
+										</th:block>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group d-flex justify-content-center mb-4">
+								<button type="submit"
+									class="btn text-white shadow-sm w-50 nagoyameshi-btn">予約する</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+
+	<!-- Flatpickr -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+	<script th:inline="javascript">
+		const restaurantRegularHolidays = /*[[${restaurantRegularHolidays}]]*/[];                
+	</script>
+	<script th:src="@{/js/flatpickr.js}"></script>
+</body>
+
+</html>

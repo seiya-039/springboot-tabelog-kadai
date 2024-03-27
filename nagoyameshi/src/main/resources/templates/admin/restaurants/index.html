@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>店舗一覧</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container py-4 nagoyameshi-container">
+				<div class="row justify-content-center">
+
+					<div class="col container">
+						<div class="row justify-content-center">
+							<div class="col-xxl-9 col-xl-10 col-lg-11">
+								<h1 class="mb-4 text-center">店舗一覧</h1>
+
+								<div class="d-flex justify-content-between align-items-end flex-wrap">
+									<form method="get" th:action="@{/admin/restaurants}"
+										class="nagoyaemshi-admin-search-box mb-3">
+										<div class="input-group">
+											<input type="text" class="form-control" name="keyword" th:value="${keyword}"
+												placeholder="店舗名で検索">
+											<button type="submit"
+												class="btn text-white shadow-sm nagoyameshi-btn">検索</button>
+										</div>
+									</form>
+
+									<a th:href="@{/admin/restaurants/register}"
+										class="btn text-white shadow-sm mb-3 nagoyameshi-btn">＋ 新規登録</a>
+								</div>
+
+								<div th:if="${successMessage}" class="alert alert-info" role="alert">
+									<span th:text="${successMessage}"></span>
+								</div>
+
+								<div>
+									<p class="mb-0"
+										th:text="${'計' + #numbers.formatInteger(restaurantPage.getTotalElements(), 1, 'COMMA') + '件'}">
+									</p>
+								</div>
+
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th scope="col">ID</th>
+											<th scope="col">店舗名</th>
+											<th scope="col">郵便番号</th>
+											<th scope="col">住所</th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="restaurant : ${restaurantPage}">
+											<td th:text="${restaurant.getId()}"></td>
+											<td th:text="${restaurant.getName()}"></td>
+											<td
+												th:text="${#strings.substring(restaurant.getPostalCode(), 0, 3) + '-' + #strings.substring(restaurant.getPostalCode(), 3)}">
+											</td>
+											<td th:text="${restaurant.getAddress()}"></td>
+											<td><a th:href="@{/admin/restaurants/__${restaurant.getId()}__}">詳細</a></td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- ページネーション -->
+								<div th:if="${restaurantPage.getTotalPages() > 1}"
+									class="d-flex justify-content-center">
+									<nav aria-label="店舗一覧ページ">
+										<ul class="pagination">
+											<li class="page-item">
+												<span th:if="${restaurantPage.isFirst()}"
+													class="page-link disabled">‹</span>
+												<a th:unless="${restaurantPage.isFirst()}"
+													th:href="@{/admin/restaurants(page = ${restaurantPage.getNumber() - 1}, keyword = ${keyword})}"
+													class="page-link">‹</a>
+											</li>
+											<li th:each="i : ${#numbers.sequence(0, restaurantPage.getTotalPages() - 1)}"
+												class="page-item">
+												<span th:if="${i == restaurantPage.getNumber()}"
+													class="page-link active" th:text="${i + 1}"></span>
+												<a th:unless="${i == restaurantPage.getNumber()}"
+													th:href="@{/admin/restaurants(page = ${i}, keyword = ${keyword})}"
+													class="page-link" th:text="${i + 1}"></a>
+											</li>
+											<li class="page-item">
+												<span th:if="${restaurantPage.isLast()}"
+													class="page-link disabled">›</span>
+												<a th:unless="${restaurantPage.isLast()}"
+													th:href="@{/admin/restaurants(page = ${restaurantPage.getNumber() + 1}, keyword = ${keyword})}"
+													class="page-link">›</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>

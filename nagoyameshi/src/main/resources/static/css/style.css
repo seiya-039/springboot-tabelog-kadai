@@ -1,0 +1,388 @@
+/* Bootstrap用スタイルここから */
+:root {
+	--bs-font-sans-serif: 'Noto Sans JP', sans-serif;
+	--bs-body-font-size: 0.9rem;
+	--bs-body-line-height: 1.6;
+	--bs-primary: #d95204;
+	--bs-danger: #d90421;
+	--bs-link-color: #d95204;
+	--bs-link-hover-color: #ae4203;
+}
+
+.navbar {
+	--bs-navbar-toggler-font-size: 1.125rem;
+}
+
+.dropdown-menu {
+	--bs-dropdown-font-size: 0.9rem;
+	--bs-dropdown-link-active-bg: #d95204;
+}
+
+.btn {
+	--bs-btn-font-size: 0.9rem;
+	--bs-btn-line-height: 1.6;
+}
+
+.pagination {
+	--bs-pagination-font-size: 0.9rem;
+	--bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(217, 82, 4, .25);
+	--bs-pagination-active-bg: #d95204;
+	--bs-pagination-active-border-color: #d95204;
+}
+
+.modal {
+	--bs-modal-title-line-height: 1.6;
+}
+
+.form-control {
+	font-size: 0.9rem;
+	line-height: 1.6;
+}
+
+.form-control:focus {
+	border-color: #eca982;
+	box-shadow: 0 0 0 0.25rem #d9520440;
+}
+
+.col-form-label {
+	line-height: 1.6;
+}
+
+.form-check-input {
+	margin-top: 0.3em;
+}
+
+.form-check {
+	min-height: 1.44rem;
+}
+
+.form-check-input:checked {
+	background-color: #d95204;
+	border-color: #d95204 !important;
+}
+
+.form-check-input:focus {
+	border-color: #eca982;
+	box-shadow: 0 0 0 0.25rem #d9520440;
+}
+
+.btn-group-sm>.btn,
+.btn-sm {
+	--bs-btn-font-size: 0.7875rem;
+}
+
+.fs-5 {
+	font-size: 1.125rem !important;
+}
+
+.fs-6 {
+	font-size: 0.9rem !important;
+}
+
+.form-select-sm {
+	font-size: 0.7875rem;
+}
+
+.form-select {
+	line-height: 1.6;
+}
+
+.btn-outline-primary {
+	--bs-btn-color: #d95204;
+	--bs-btn-border-color: #d95204;
+	--bs-btn-hover-bg: #d95204;
+	--bs-btn-hover-border-color: #d95204;
+	--bs-btn-focus-shadow-rgb: 217, 82, 4;
+	--bs-btn-active-bg: #d95204;
+	--bs-btn-active-border-color: #d95204;
+	--bs-btn-disabled-color: #d95204;
+	--bs-btn-disabled-border-color: #d95204;
+}
+
+/* Bootstrap用スタイルここまで */
+
+h1 {
+	font-size: 1.5rem;
+}
+
+h2 {
+	font-size: 1.375rem;
+}
+
+h3 {
+	font-size: 1.125rem;
+}
+
+h5 {
+	font-size: 1.125rem;
+}
+
+a {
+	color: #d95204;
+	text-decoration: none !important;
+}
+
+a:hover {
+	color: #ae4203;
+}
+
+.nagoyameshi-wrapper {
+	min-height: 100vh;
+	position: relative;
+	padding-bottom: 240px;
+	box-sizing: border-box;
+}
+
+.nagoyameshi-logo {
+	height: 24px;
+}
+
+.nagoyameshi-app-name {
+	font-family: 'Carter One', cursive;
+	font-size: 24px;
+	color: #191919;
+}
+
+nav .nagoyameshi-app-name {
+	padding: 0.32rem 0;
+}
+
+footer {
+	width: 100%;
+	height: 240px;
+	position: absolute;
+	bottom: 0;
+	padding: 50px 15px;
+}
+
+.nagoyameshi-footer-logo {
+	margin-bottom: 20px;
+}
+
+.nagoyameshi-footer-link {
+	margin-bottom: 30px;
+}
+
+.nagoyameshi-btn {
+	background-color: #d95204 !important;
+	transition: 0.15s;
+}
+
+.nagoyameshi-btn:hover {
+	opacity: 0.85;
+}
+
+.nagoyameshi-btn-danger {
+	background-color: #d90421 !important;
+	transition: 0.15s;
+}
+
+.nagoyameshi-btn-danger:hover {
+	background-color: #b8031c !important;
+	border-color: #ae031a;
+}
+
+.nagoyameshi-swiper {
+	width: 100%;
+	height: 480px;
+}
+
+.nagoyameshi-swiper img {
+	width: 100%;
+	height: 480px;
+	object-fit: cover;
+}
+
+.nagoyameshi-overlay-background {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 10;
+}
+
+.nagoyameshi-overlay-text {
+	padding: 0 70px;
+}
+
+.nagoyameshi-catchphrase-heading {
+	font-size: 36px;
+	line-height: 1.5;
+	font-family: 'Noto Serif JP', serif;
+	font-weight: 600;
+	text-shadow: 0.25rem 0.25rem 1rem rgb(0 0 0 / 60%);
+}
+
+.nagoyameshi-catchphrase-paragraph {
+	font-size: 16px;
+	line-height: 2;
+	font-family: 'Noto Serif JP', serif;
+	font-weight: 400;
+	text-shadow: 0.25rem 0.25rem 1rem rgb(0 0 0 / 60%);
+}
+
+.nagoyaemshi-admin-search-box {
+	max-width: 240px;
+}
+
+.nagoyameshi-user-search-box {
+	max-width: 300px;
+}
+
+.nagoyameshi-users-table {
+	word-break: break-all;
+}
+
+.nagoyameshi-card-link {
+	transition: 0.3s;
+}
+
+.nagoyameshi-card-link:hover {
+	opacity: 0.7;
+}
+
+.nagoyameshi-vertical-card-image {
+	width: 100%;
+	height: 120px;
+	object-fit: cover;
+}
+
+.nagoyameshi-horizontal-card-image {
+	width: 100%;
+	height: 240px;
+	object-fit: cover;
+}
+
+.nagoyameshi-overlay-background {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 10;
+}
+
+.nagoyameshi-category-name {
+	text-shadow: 0.25rem 0.25rem 1rem rgb(0 0 0 / 60%);
+}
+
+.nagoyameshi-sort-box {
+	width: 150px;
+}
+
+.nagoyameshi-bg {
+	background-color: #d95204 !important;
+}
+
+/* 星評価ここから */
+.nagoyameshi-star-rating {
+	position: relative;
+	z-index: 0;
+	display: inline-block;
+	white-space: nowrap;
+	color: #cccccc;
+}
+
+.nagoyameshi-star-rating:before,
+.nagoyameshi-star-rating:after {
+	content: '★★★★★';
+}
+
+.nagoyameshi-star-rating:after {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	color: #f29f05;
+}
+
+.nagoyameshi-star-rating[data-rate="5.0"]:after {
+	width: 100%;
+}
+
+.nagoyameshi-star-rating[data-rate="4.5"]:after {
+	width: 90%;
+}
+
+.nagoyameshi-star-rating[data-rate="4.0"]:after {
+	width: 80%;
+}
+
+.nagoyameshi-star-rating[data-rate="3.5"]:after {
+	width: 70%;
+}
+
+.nagoyameshi-star-rating[data-rate="3.0"]:after {
+	width: 60%;
+}
+
+.nagoyameshi-star-rating[data-rate="2.5"]:after {
+	width: 50%;
+}
+
+.nagoyameshi-star-rating[data-rate="2.0"]:after {
+	width: 40%;
+}
+
+.nagoyameshi-star-rating[data-rate="1.5"]:after {
+	width: 30%;
+}
+
+.nagoyameshi-star-rating[data-rate="1.0"]:after {
+	width: 20%;
+}
+
+.nagoyameshi-star-rating[data-rate="0.5"]:after {
+	width: 10%;
+}
+
+.nagoyameshi-star-rating[data-rate="0.0"]:after {
+	width: 0%;
+}
+
+/* 星評価ここまで */
+
+/* flatpickrの土曜日の色 */
+.flatpickr-weekday:nth-child(7),
+.flatpickr-days .flatpickr-day:not(.flatpickr-disabled):not(.prevMonthDay):not(.nextMonthDay):nth-child(7n) {
+	color: #0421D9;
+}
+
+/* flatpickrの日曜日の色 */
+.flatpickr-weekday:nth-child(7n + 1),
+.flatpickr-day:not(.flatpickr-disabled):not(.prevMonthDay):not(.nextMonthDay):nth-child(7n + 1) {
+	color: #D90421;
+}
+
+/* flatpickrの選択された日付の色 */
+.flatpickr-day.selected {
+	background: #D95204 !important;
+	border-color: #D95204 !important;
+}
+
+/* クレジットカード番号入力フォーム */
+.nagoyameshi-card-holder-name,
+.nagoyameshi-card-element {
+	border-radius: .375rem;
+	padding: 12px;
+	border: 1px solid #ced4da;
+	height: 44px;
+	width: 100%;
+	background: white;
+}
+
+.nagoyameshi-card-holder-name {
+	font-family: sans-serif;
+	outline: none;
+}
+
+.nagoyameshi-card-error {
+	display: none;
+}
+
+@media screen and (min-width: 1400px) {
+	.nagoyameshi-container {
+		max-width: 1200px;
+	}
+}

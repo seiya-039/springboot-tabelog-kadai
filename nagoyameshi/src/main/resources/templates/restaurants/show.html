@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>店舗詳細</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container nagoyameshi-container pb-5">
+				<div class="row justify-content-center">
+					<div class="col-xxl-6 col-xl-7 col-lg-8 col-md-10">
+						<div class="d-flex align-items-center justify-content-between mb-4">									
+							<nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+								<ol class="breadcrumb mb-0">
+									<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+									<li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
+									<li class="breadcrumb-item active" aria-current="page">店舗詳細</li>
+								</ol>
+							</nav>
+							
+							<!-- お気に入りセクション -->																										
+							<div sec:authorize="isAuthenticated()">																							
+								<div th:if="${isFavorite}">																									
+									<a href="#"																								
+										onclick="event.preventDefault(); document.getElementById('favorite-form').submit();">&#9829;																							
+										お気に入り解除</a>																							
+									<form method="post"																								
+										th:action="@{/restaurants/__${restaurant.getId()}__/favorites/__${favorite.getId()}__/delete}"																							
+										id="favorite-form" class="d-none"></form>																							
+								</div>																									
+								<div th:unless="${isFavorite}">																									
+									<a href="#"																								
+										onclick="event.preventDefault(); document.getElementById('favorite-form').submit();">&#9825;																							
+										お気に入り追加</a>																							
+									<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/create}"																								
+										id="favorite-form" class="d-none"></form>																							
+								</div>																									
+							</div>																										
+						</div>																											
+
+
+						<h1 class="mb-2 text-center" th:text="${restaurant.getName()}"></h1>
+
+						<p class="text-center">
+							<span class="nagoyameshi-star-rating me-1"
+								th:data-rate="${restaurant.getRoundedAverageScore()}"></span>
+							<span th:text="${restaurant.getFormattedAverageScore()}"></span><span
+								th:text="${'（' + restaurant.getReviews().size() + '件）'}"></span>
+						</p>
+
+						<div th:if="${successMessage}" class="alert alert-info" role="alert">
+							<span th:text="${successMessage}"></span>
+						</div>
+
+						<ul class="nav nav-tabs mb-2">
+							<li class="nav-item">
+								<a class="nav-link active text-white nagoyameshi-bg" aria-current="page"
+									th:href="@{/restaurants/__${restaurant.getId()}__}">トップ</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link link-dark"
+									th:href="@{/restaurants/__${restaurant.getId()}__/reservations/register}">予約</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link link-dark"
+									th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">レビュー</a>
+							</li>
+						</ul>
+
+						<div class="mb-2" th:if="${restaurant.getImage()}">
+							<img th:src="@{/storage/__${restaurant.getImage()}__}" class="w-100" alt="店舗画像">
+						</div>
+
+						<div class="container">
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">店舗名</span>
+								</div>
+
+								<div class="col">
+									<span th:text="${restaurant.getName()}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">説明</span>
+								</div>
+
+								<div class="col">
+									<span th:text="${restaurant.getDescription()}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">価格帯</span>
+								</div>
+
+								<div class="col">
+									<span
+										th:text="${#numbers.formatInteger(restaurant.getLowestPrice(), 1, 'COMMA') + '～' + #numbers.formatInteger(restaurant.getHighestPrice(), 1, 'COMMA') + '円'}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">郵便番号</span>
+								</div>
+
+								<div class="col">
+									<span
+										th:text="${#strings.substring(restaurant.getPostalCode(), 0, 3) + '-' + #strings.substring(restaurant.getPostalCode(), 3)}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">住所</span>
+								</div>
+
+								<div class="col">
+									<span th:text="${restaurant.getAddress()}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">営業時間</span>
+								</div>
+
+								<div class="col">
+									<span
+										th:text="${#temporals.format(restaurant.getOpeningTime(), 'H:mm') + '～' + #temporals.format(restaurant.getClosingTime(), 'H:mm')}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">定休日</span>
+								</div>
+
+								<div class="col d-flex">
+									<div th:unless="${regularHolidayRestaurants.isEmpty()}">
+										<span th:each="regularHolidayRestaurant, stat : ${regularHolidayRestaurants}"
+											th:if="${stat.first}"
+											th:text="${regularHolidayRestaurant.getRegularHoliday().getDay()}"></span><span
+											th:each="regularHolidayRestaurant, stat : ${regularHolidayRestaurants}"
+											th:unless="${stat.first}"
+											th:text="${'、' + regularHolidayRestaurant.getRegularHoliday().getDay()}"></span>
+									</div>
+									<div th:if="${regularHolidayRestaurants.isEmpty()}">
+										<span>年中無休</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">座席数</span>
+								</div>
+
+								<div class="col">
+									<span
+										th:text="${#numbers.formatInteger(restaurant.getSeatingCapacity(), 1, 'COMMA') + '席'}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-4 border-bottom">
+								<div class="col-2">
+									<span class="fw-bold">カテゴリ</span>
+								</div>
+
+								<div class="col d-flex">
+									<div th:unless="${categoryRestaurants.isEmpty()}">
+										<span th:each="categoryRestaurant, stat : ${categoryRestaurants}"
+											th:if="${stat.first}"
+											th:text="${categoryRestaurant.getCategory().getName()}"></span><span
+											th:each="categoryRestaurant, stat : ${categoryRestaurants}"
+											th:unless="${stat.first}"
+											th:text="${'、' + categoryRestaurant.getCategory().getName()}"></span>
+									</div>
+									<div th:if="${categoryRestaurants.isEmpty()}">
+										<span>未設定</span>
+									</div>
+								</div>
+							</div>	
+						</div>
+					</div>
+				</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>

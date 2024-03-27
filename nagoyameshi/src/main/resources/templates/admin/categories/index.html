@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>カテゴリ一覧</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container py-4 nagoyameshi-container">
+				<div class="row justify-content-center">
+
+					<!-- カテゴリの登録用モーダル -->
+					<div class="modal fade" id="createCategoryModal" tabindex="-1"
+						aria-labelledby="createCategoryModalLabel">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="createCategoryModalLabel">カテゴリの登録</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="閉じる"></button>
+								</div>
+								<form method="post" th:action="@{/admin/categories/create}"
+									th:object="${categoryRegisterForm}">
+									<div class="modal-body">
+										<input type="text" class="form-control" th:field="*{name}">
+									</div>
+									<div class="modal-footer">
+										<button type="submit"
+											class="btn text-white shadow-sm nagoyameshi-btn">登録</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<!-- カテゴリの編集用モーダル -->
+					<div class="modal fade" id="editCategoryModal" tabindex="-1"
+						aria-labelledby="editCategoryModalLabel">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="editCategoryModalLabel">カテゴリの編集</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="閉じる"></button>
+								</div>
+								<form method="post" action="" name="editCategoryForm" th:object="${categoryEditForm}">
+									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+									<input type="hidden" th:field="*{id}">
+
+									<div class="modal-body">
+										<input type="text" class="form-control" th:field="*{name}">
+									</div>
+									<div class="modal-footer">
+										<button type="submit"
+											class="btn text-white shadow-sm nagoyameshi-btn">更新</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal fade" id="deleteCategoryModal" tabindex="-1"
+						aria-labelledby="deleteCategoryModalLabel">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="deleteCategoryModalLabel"></h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="閉じる"></button>
+								</div>
+								<div class="modal-footer">
+									<form method="post" action="" name="deleteCategoryForm">
+										<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+										<button type="submit"
+											class="btn text-white shadow-sm nagoyameshi-btn-danger">削除</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col container">
+						<div class="row justify-content-center">
+							<div class="col-xl-7 col-lg-8 col-md-9">
+								<h1 class="mb-4 text-center">カテゴリ一覧</h1>
+
+								<div class="d-flex justify-content-between align-items-end flex-wrap">
+									<form method="get" th:action="@{/admin/categories}"
+										class="nagoyaemshi-admin-search-box mb-3">
+										<div class="input-group">
+											<input type="text" class="form-control" name="keyword" th:value="${keyword}"
+												placeholder="カテゴリ名で検索">
+											<button type="submit"
+												class="btn text-white shadow-sm nagoyameshi-btn">検索</button>
+										</div>
+									</form>
+
+									<a href="#" class="btn text-white shadow-sm mb-3 nagoyameshi-btn"
+										data-bs-toggle="modal" data-bs-target="#createCategoryModal">＋ 新規登録</a>
+								</div>
+
+								<div th:if="${successMessage}" class="alert alert-info" role="alert">
+									<span th:text="${successMessage}"></span>
+								</div>
+
+								<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+									<span th:text="${errorMessage}"></span>
+								</div>
+
+								<div>
+									<p class="mb-0"
+										th:text="${'計' + #numbers.formatInteger(categoryPage.getTotalElements(), 1, 'COMMA') + '件'}">
+									</p>
+								</div>
+
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th scope="col">ID</th>
+											<th scope="col">カテゴリ名</th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="category : ${categoryPage}">
+											<td th:text="${category.getId()}"></td>
+											<td th:text="${category.getName()}"></td>
+											<td>
+												<a href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
+													th:data-category-id="${category.getId()}"
+													th:data-category-name="${category.getName()}">編集</a>
+											</td>
+											<td>
+												<a href="#" class="link-secondary" data-bs-toggle="modal"
+													data-bs-target="#deleteCategoryModal"
+													th:data-category-id="${category.getId()}"
+													th:data-category-name="${category.getName()}">削除</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- ページネーション -->
+								<div th:if="${categoryPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+									<nav aria-label="カテゴリ一覧ページ">
+										<ul class="pagination">
+											<li class="page-item">
+												<span th:if="${categoryPage.isFirst()}"
+													class="page-link disabled">‹</span>
+												<a th:unless="${categoryPage.isFirst()}"
+													th:href="@{/admin/categories(page = ${categoryPage.getNumber() - 1}, keyword = ${keyword})}"
+													class="page-link">‹</a>
+											</li>
+											<li th:each="i : ${#numbers.sequence(0, categoryPage.getTotalPages() - 1)}"
+												class="page-item">
+												<span th:if="${i == categoryPage.getNumber()}" class="page-link active"
+													th:text="${i + 1}"></span>
+												<a th:unless="${i == categoryPage.getNumber()}"
+													th:href="@{/admin/categories(page = ${i}, keyword = ${keyword})}"
+													class="page-link" th:text="${i + 1}"></a>
+											</li>
+											<li class="page-item">
+												<span th:if="${categoryPage.isLast()}"
+													class="page-link disabled">›</span>
+												<a th:unless="${categoryPage.isLast()}"
+													th:href="@{/admin/categories(page = ${categoryPage.getNumber() + 1}, keyword = ${keyword})}"
+													class="page-link">›</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+	<script th:src="@{/js/category-modal.js}"></script>
+</body>
+
+</html>

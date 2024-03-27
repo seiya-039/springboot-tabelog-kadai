@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>会社情報</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container py-4 nagoyameshi-container">
+				<div class="row justify-content-center">
+
+					<div class="col container">
+						<div class="row justify-content-center">
+							<div class="col-xl-7 col-lg-8 col-md-9">
+
+								<h1 class="mb-4 text-center">会社情報</h1>
+
+								<div class="d-flex justify-content-end align-items-end mb-3">
+									<div>
+										<a th:href="@{/admin/company/__${company.getId()}__/edit}" class="me-2">編集</a>
+									</div>
+								</div>
+
+								<div th:if="${successMessage}" class="alert alert-info" role="alert">
+									<span th:text="${successMessage}"></span>
+								</div>
+
+								<div class="container mb-4">
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-3">
+											<span class="fw-bold">会社名</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${company.getName()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-3">
+											<span class="fw-bold">所在地</span>
+										</div>
+
+										<div class="col">
+											<span
+												th:text="${'〒' + #strings.substring(company.getPostalCode(), 0, 3) + '-' + #strings.substring(company.getPostalCode(), 3) + ' ' + company.getAddress()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-3">
+											<span class="fw-bold">代表者</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${company.getRepresentative()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-3">
+											<span class="fw-bold">設立</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${company.getEstablishmentDate()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-3">
+											<span class="fw-bold">資本金</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${company.getCapital()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-3">
+											<span class="fw-bold">事業内容</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${company.getBusiness()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-3">
+											<span class="fw-bold">従業員数</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${company.getNumberOfEmployees()}"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>

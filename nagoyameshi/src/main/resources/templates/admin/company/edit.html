@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>会社情報編集</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container py-4 nagoyameshi-container">
+				<div class="row justify-content-center">
+
+					<div class="col container">
+						<div class="row justify-content-center">
+							<div class="col-xl-7 col-lg-8 col-md-9">
+								<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+									<ol class="breadcrumb mb-0">
+										<li class="breadcrumb-item"><a th:href="@{/admin/company}">会社情報</a></li>
+										<li class="breadcrumb-item active" aria-current="page">会社情報編集</li>
+									</ol>
+								</nav>
+
+								<h1 class="mb-4 text-center">会社情報編集</h1>
+
+								<hr class="mb-4">
+
+								<form method="post" th:action="@{/admin/company/__${companyEditForm.getId()}__/update}"
+									th:object="${companyEditForm}">
+									<div class="form-group row mb-3">
+										<label for="name"
+											class="col-md-5 col-form-label text-md-left fw-bold">会社名</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('name')}" class="text-danger small mb-2"
+												th:errors="*{name}"></div>
+											<input type="text" class="form-control" th:field="*{name}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="postalCode"
+											class="col-md-5 col-form-label text-md-left fw-bold">郵便番号</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('postalCode')}"
+												class="text-danger small mb-2" th:errors="*{postalCode}"></div>
+											<input type="text" class="form-control" th:field="*{postalCode}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="address"
+											class="col-md-5 col-form-label text-md-left fw-bold">所在地</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('address')}" class="text-danger small mb-2"
+												th:errors="*{address}"></div>
+											<input type="text" class="form-control" th:field="*{address}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="representative"
+											class="col-md-5 col-form-label text-md-left fw-bold">代表者</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('representative')}"
+												class="text-danger small mb-2" th:errors="*{representative}"></div>
+											<input type="text" class="form-control" th:field="*{representative}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="establishmentDate"
+											class="col-md-5 col-form-label text-md-left fw-bold">設立</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('establishmentDate')}"
+												class="text-danger small mb-2" th:errors="*{establishmentDate}"></div>
+											<input type="text" class="form-control" th:field="*{establishmentDate}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="capital"
+											class="col-md-5 col-form-label text-md-left fw-bold">資本金</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('capital')}" class="text-danger small mb-2"
+												th:errors="*{capital}"></div>
+											<input type="text" class="form-control" th:field="*{capital}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="business"
+											class="col-md-5 col-form-label text-md-left fw-bold">事業内容</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('business')}" class="text-danger small mb-2"
+												th:errors="*{business}"></div>
+											<input type="text" class="form-control" th:field="*{business}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="numberOfEmployees"
+											class="col-md-5 col-form-label text-md-left fw-bold">従業員数</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('numberOfEmployees')}"
+												class="text-danger small mb-2" th:errors="*{numberOfEmployees}"></div>
+											<input type="text" class="form-control" th:field="*{numberOfEmployees}">
+										</div>
+									</div>
+
+									<hr class="my-4">
+
+									<div class="form-group d-flex justify-content-center mb-4">
+										<button type="submit"
+											class="btn text-white shadow-sm w-50 nagoyameshi-btn">更新</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>

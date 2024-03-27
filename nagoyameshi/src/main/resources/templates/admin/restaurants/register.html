@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>店舗登録</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container py-4 nagoyameshi-container">
+				<div class="row justify-content-center">
+
+					<div class="col container">
+						<div class="row justify-content-center">
+							<div class="col-xl-7 col-lg-8 col-md-9">
+								<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+									<ol class="breadcrumb mb-0">
+										<li class="breadcrumb-item"><a th:href="@{/admin/restaurants}">店舗一覧</a></li>
+										<li class="breadcrumb-item active" aria-current="page">店舗登録</li>
+									</ol>
+								</nav>
+
+								<h1 class="mb-4 text-center">店舗登録</h1>
+
+								<hr class="mb-4">
+
+								<form method="post" th:action="@{/admin/restaurants/create}"
+									th:object="${restaurantRegisterForm}" enctype="multipart/form-data">
+									<div class="form-group row mb-3">
+										<label for="name"
+											class="col-md-5 col-form-label text-md-left fw-bold">店舗名</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('name')}" class="text-danger small mb-2"
+												th:errors="*{name}"></div>
+											<input type="text" class="form-control" th:field="*{name}" autofocus>
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="image"
+											class="col-md-5 col-form-label text-md-left fw-bold">店舗画像</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('image')}" class="text-danger small mb-2"
+												th:errors="*{image}"></div>
+											<input type="file" class="form-control" th:field="*{image}">
+										</div>
+									</div>
+
+									<!-- 選択された画像の表示場所 -->
+									<div class="row" id="imagePreview"></div>
+
+									<div class="form-group row mb-3">
+										<label for="description"
+											class="col-md-5 col-form-label text-md-left fw-bold">説明</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('description')}"
+												class="text-danger small mb-2" th:errors="*{description}"></div>
+											<textarea class="form-control" th:field="*{description}" cols="30"
+												rows="5"></textarea>
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="lowestPrice"
+											class="col-md-5 col-form-label text-md-left fw-bold">最低価格</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('lowestPrice')}"
+												class="text-danger small mb-2" th:errors="*{lowestPrice}"></div>
+											<select class="form-control form-select" th:field="*{lowestPrice}">
+												<option value="" hidden>選択してください</option>
+												<option th:each="lowestPrice : ${lowestPrices}"
+													th:value="${lowestPrice}"
+													th:selected="${lowestPrice == restaurantRegisterForm.getLowestPrice()}"
+													th:text="${#numbers.formatInteger(lowestPrice, 1, 'COMMA') + '円'}">
+												</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="highestPrice"
+											class="col-md-5 col-form-label text-md-left fw-bold">最高価格</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('highestPrice')}"
+												class="text-danger small mb-2" th:errors="*{highestPrice}"></div>
+											<select class="form-control form-select" th:field="*{highestPrice}">
+												<option value="" hidden>選択してください</option>
+												<option th:each="highestPrice : ${highestPrices}"
+													th:value="${highestPrice}"
+													th:selected="${highestPrice == restaurantRegisterForm.getHighestPrice()}"
+													th:text="${#numbers.formatInteger(highestPrice, 1, 'COMMA') + '円'}">
+												</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="postalCode"
+											class="col-md-5 col-form-label text-md-left fw-bold">郵便番号</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('postalCode')}"
+												class="text-danger small mb-2" th:errors="*{postalCode}"></div>
+											<input type="text" class="form-control" th:field="*{postalCode}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="address"
+											class="col-md-5 col-form-label text-md-left fw-bold">住所</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('address')}" class="text-danger small mb-2"
+												th:errors="*{address}"></div>
+											<input type="text" class="form-control" th:field="*{address}">
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="openingTime"
+											class="col-md-5 col-form-label text-md-left fw-bold">開店時間</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('openingTime')}"
+												class="text-danger small mb-2" th:errors="*{openingTime}"></div>
+											<select class="form-control form-select" th:field="*{openingTime}">
+												<option value="" hidden>選択してください</option>
+												<option th:each="openingTime : ${openingTimes}"
+													th:value="${openingTime}"
+													th:selected="${openingTime == restaurantRegisterForm.getOpeningTime()}"
+													th:text="${openingTime}"></option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="closingTime"
+											class="col-md-5 col-form-label text-md-left fw-bold">閉店時間</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('closingTime')}"
+												class="text-danger small mb-2" th:errors="*{closingTime}"></div>
+											<select class="form-control form-select" th:field="*{closingTime}">
+												<option value="" hidden>選択してください</option>
+												<option th:each="closingTime : ${closingTimes}"
+													th:value="${closingTime}"
+													th:selected="${closingTime == restaurantRegisterForm.getClosingTime()}"
+													th:text="${closingTime}"></option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label class="col-md-5 col-form-label text-md-left fw-bold">定休日</label>
+
+										<div class="col-md-7 d-flex flex-wrap">
+											<div class="form-check d-flex align-items-center me-3"
+												th:each="regularHoliday, stat : ${regularHolidays}">
+												<input type="checkbox" class="form-check-input"
+													th:id="${'regularHoliday' + stat.index}" name="regularHolidayIds[]"
+													th:value="${regularHoliday.getId()}"
+													th:checked="${restaurantRegisterForm.regularHolidayIds != null ? #lists.contains(restaurantRegisterForm.regularHolidayIds, regularHoliday.getId()) : false}" />
+												<label class="form-check-label"
+													th:for="${'regularHoliday' + stat.index}">
+													<span class="badge bg-secondary ms-1"
+														th:text="${regularHoliday.getDay()}"></span>
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group row mb-3">
+										<label for="seatingCapacity"
+											class="col-md-5 col-form-label text-md-left fw-bold">座席数</label>
+
+										<div class="col-md-7">
+											<div th:if="${#fields.hasErrors('seatingCapacity')}"
+												class="text-danger small mb-2" th:errors="*{seatingCapacity}"></div>
+											<input type="number" class="form-control" th:field="*{seatingCapacity}">
+										</div>
+									</div>
+
+									<th:block th:each="i : ${#numbers.sequence(0, 2)}">
+										<div class="form-group row mb-3">
+											<label th:for="${'category' + (i + 1)}"
+												class="col-md-5 col-form-label text-md-left fw-bold"
+												th:text="${'カテゴリ' + (i + 1) + '（3つまで選択可）'}"></label>
+
+											<div class="col-md-7">
+												<select class="form-control form-select" th:id="${'category' + (i + 1)}"
+													name="categoryIds[]">
+													<option value="">選択なし</option>
+													<div th:each="category : ${categories}">
+														<option th:value="${category.getId()}"
+															th:selected="${restaurantRegisterForm.categoryIds != null && i < restaurantRegisterForm.categoryIds.size() ? restaurantRegisterForm.categoryIds[i] == category.getId() : false}"
+															th:text="${category.getName()}"></option>
+													</div>
+												</select>
+											</div>
+										</div>
+									</th:block>
+
+									<hr class="my-4">
+
+									<div class="form-group d-flex justify-content-center mb-4">
+										<button type="submit"
+											class="btn text-white shadow-sm w-50 nagoyameshi-btn">登録</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+	<script th:src="@{/js/preview.js}"></script>
+</body>
+
+</html>

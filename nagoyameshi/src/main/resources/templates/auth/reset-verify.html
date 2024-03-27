@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>パスワード変更</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container pt-4 pb-5 nagoyameshi-container">
+				<div class="row justify-content-center">
+					<div class="col-xl-5 col-lg-6 col-md-8">
+						<h1 class="mb-4 text-center">パスワード変更</h1>
+
+						<hr class="mb-4">
+
+						<form method="post" th:action="@{/reset/verify/update}" th:object="${resetPasswordForm}">
+
+							<input class="form-control" th:value="${resetPasswordForm.getId()}" th:field="*{id}"
+								style="display: none;">
+
+							<div class="form-group row mb-3">
+								<div class="col-md-5">
+									<label for="password" class="col-form-label text-md-left fw-bold">
+										<div class="d-flex align-items-center">
+											<span class="me-1">パスワード</span>
+											<span class="badge bg-danger">必須</span>
+										</div>
+									</label>
+								</div>
+								<div class="col-md-7">
+									<div th:if="${#fields.hasErrors('password')}" class="text-danger small mb-2"
+										th:errors="*{password}"></div>
+									<input type="password" class="form-control" th:field="*{password}" required
+										autocomplete="new-password">
+								</div>
+							</div>
+
+							<div class="form-group row mb-3">
+								<div class="col-md-5">
+									<label for="passwordConfirmation" class="col-form-label text-md-left fw-bold">
+										<div class="d-flex align-items-center">
+											<span class="me-1">パスワード（確認用）</span>
+											<span class="badge bg-danger">必須</span>
+										</div>
+									</label>
+								</div>
+								<div class="col-md-7">
+									<div th:if="${#fields.hasErrors('passwordConfirmation')}"
+										class="text-danger small mb-2" th:errors="*{passwordConfirmation}"></div>
+									<input type="password" class="form-control" th:field="*{passwordConfirmation}"
+										required autocomplete="new-password">
+								</div>
+							</div>
+
+							<hr class="my-4">
+
+							<div class="form-group d-flex justify-content-center mb-4">
+								<button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">登録</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>

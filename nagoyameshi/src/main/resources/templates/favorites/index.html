@@ -1,0 +1,92 @@
+ <!DOCTYPE html>																																			
+ <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    																																			
+     <head>																																			
+         <div th:replace="~{fragment :: meta}"></div>   																																			
+              																																			
+         <div th:replace="~{fragment :: styles}"></div>																																			
+           																																			
+         <title>お気に入り一覧</title>   																																			
+     </head>																																			
+     <body>																																			
+         <div class="nagoyameshi-wrapper">																																			
+             <!-- ヘッダー -->																																			
+             <div th:replace="~{fragment :: header}"></div>																																			
+             																																			
+             <main>																																			
+                 <div class="container nagoyameshi-container pb-5">																																			
+                     <div class="row justify-content-center">																																			
+                         <div class="col-xl-9 col-lg-8 col-md-12">																																			
+                             <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">																																			
+                                 <ol class="breadcrumb mb-0"> 																																			
+                                     <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>                       																																			
+                                     <li class="breadcrumb-item active" aria-current="page">お気に入り一覧</li>																																			
+                                 </ol>																																			
+                             </nav> 																																			
+                             																																			
+                             <h1 class="mb-4 text-center">お気に入り一覧</h1>  																																			
+                                             																																			
+                             <div class="mb-3" th:each="favorite : ${favoritePage}">																																			
+                                 <a th:href="@{/restaurants/__${favorite.getRestaurant().getId()}__}" class="link-dark nagoyameshi-card-link">																																			
+                                     <div class="card h-100">   																																			
+                                         <div class="row g-0">																																			
+                                             <div class="col-md-4">                                                                                																																			
+                                                 <img th:if="${favorite.getRestaurant().getImage()}" th:src="@{/storage/__${favorite.getRestaurant().getImage()}__}" class="card-img-top nagoyameshi-horizontal-card-image" alt="店舗画像">                                                     																																			
+                                                 <img th:unless="${favorite.getRestaurant().getImage()}" th:src="@{/images/noImage.png}" class="card-img-top nagoyameshi-horizontal-card-image" alt="NO IMAGE">                                                    																																			
+                                             </div> 																																			
+                                             <div class="col-md-8">                                                                                                                        																																			
+                                                 <div class="card-body">                                    																																			
+                                                     <h3 class="card-title mb-3" th:text="${favorite.getRestaurant().getName()}"></h3>                                            																																			
+  																																			
+                                                     <hr class="mb-3">																																			
+                                                     																																			
+                                                     <p class="card-text mb-2">																																			
+                                                         <span th:text="${favorite.getRestaurant().getDescription()}"></span>																																			
+                                                     </p>                                                    																																			
+                                                     																																			
+                                                     <p class="card-text mb-2">																																			
+                                                         <small class="text-muted" th:text="${'〒' + favorite.getRestaurant().getPostalCode()}"></small>																																			
+                                                         <small class="text-muted" th:text="${favorite.getRestaurant().getAddress()}"></small>                                                      																																			
+                                                     </p>   																																			
+                                                                                                                                                                                                                                    																																			
+                                                     <p class="card-text">																																			
+                                                         <span th:text="${#numbers.formatInteger(favorite.getRestaurant().getLowestPrice(), 1, 'COMMA') + '～' + #numbers.formatInteger(favorite.getRestaurant.getHighestPrice(), 1, 'COMMA') + '円'}"></span>																																			
+                                                     </p>                                    																																			
+                                                 </div>																																			
+                                             </div>																																			
+                                         </div>																																			
+                                     </div>    																																			
+                                 </a>            																																			
+                             </div>                                                                                       																																			
+             																																			
+                             <!-- ページネーション -->																																			
+                             <div th:if="${favoritePage.getTotalPages() > 1}" class="d-flex justify-content-center">																																			
+                                 <nav aria-label="お気に入り一覧ページ">																																			
+                                     <ul class="pagination">																																			
+                                         <li class="page-item">																																			
+                                             <span th:if="${favoritePage.isFirst()}" class="page-link disabled">前</span>																																			
+                                             <a th:unless="${favoritePage.isFirst()}" th:href="@{/favorites(page = ${favoritePage.getNumber() - 1})}" class="page-link nagoyameshi-page-link">前</a>																																			
+                                         </li>																																			
+                                         <li th:each="i : ${#numbers.sequence(0, favoritePage.getTotalPages() - 1)}" class="page-item">																																			
+                                             <span th:if="${i == favoritePage.getNumber()}" class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>																																			
+                                             <a th:unless="${i == favoritePage.getNumber()}" th:href="@{/favorites(page = ${i})}" class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>																																			
+                                         </li>																																			
+                                         <li class="page-item">                        																																			
+                                             <span th:if="${favoritePage.isLast()}" class="page-link disabled">次</span>																																			
+                                             <a th:unless="${favoritePage.isLast()}" th:href="@{/favorites(page = ${favoritePage.getNumber() + 1})}" class="page-link nagoyameshi-page-link">次</a>																																			
+                                         </li>																																			
+                                     </ul>																																			
+                                 </nav> 																																			
+                             </div>  																																			
+                                 																																			
+                         </div>                          																																			
+                     </div>																																			
+                 </div>                                                																																			
+             </main>																																			
+             																																			
+             <!-- フッター -->																																			
+             <div th:replace="~{fragment :: footer}"></div>																																			
+         </div>    																																			
+         																																			
+         <div th:replace="~{fragment :: scripts}"></div>  																																			
+   </body>																																			
+ </html>																																			

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>予約一覧</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<!-- 予約のキャンセル用モーダル -->
+			<div class="modal fade" id="cancelReservationModal" tabindex="-1"
+				aria-labelledby="cancelReservationModalLabel">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="cancelReservationModalLabel"></h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+						</div>
+						<div class="modal-footer">
+							<form method="post" action="" name="cancelReservationForm">
+								<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+								<button type="submit"
+									class="btn text-white shadow-sm nagoyameshi-btn-danger">削除</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container nagoyameshi-container pb-5">
+				<div class="row justify-content-center">
+					<div class="col-xxl-6 col-xl-7 col-lg-8 col-md-10">
+						<nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+								<li class="breadcrumb-item active" aria-current="page">予約一覧</li>
+							</ol>
+						</nav>
+
+						<h1 class="mb-3 text-center">予約一覧</h1>
+
+						<div th:if="${successMessage}" class="alert alert-info" role="alert">
+							<span th:text="${successMessage}"></span>
+						</div>
+
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">店舗名</th>
+									<th scope="col">予約日時</th>
+									<th scope="col">人数</th>
+									<th scope="col"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="reservation : ${reservationPage}">
+									<td>
+										<a th:href="@{/restaurants/__${reservation.getRestaurant().getId()}__}"
+											th:text="${reservation.getRestaurant().getName()}"></a>
+									</td>
+									<td
+										th:text="${#temporals.format(reservation.getReservedDatetime(), 'yyyy年M月d日 H時mm分')}">
+									</td>
+									<td th:text="${reservation.getNumberOfPeople() + '名'}"></td>
+									<td>
+										<a th:if="${reservation.getReservedDatetime().isAfter(currentDateTime)}"
+											href="#" class="link-secondary" data-bs-toggle="modal"
+											data-bs-target="#cancelReservationModal"
+											th:data-reservation-id="${reservation.getId()}"
+											th:data-restaurant-name="${reservation.getRestaurant().getName()}">キャンセル</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<!-- ページネーション -->
+						<div th:if="${reservationPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+							<nav aria-label="予約一覧ページ">
+								<ul class="pagination">
+									<li class="page-item">
+										<span th:if="${reservationPage.isFirst()}" class="page-link disabled">‹</span>
+										<a th:unless="${reservationPage.isFirst()}"
+											th:href="@{/reservations(page = ${reservationPage.getNumber() - 1})}"
+											class="page-link nagoyameshi-page-link">‹</a>
+									</li>
+									<li th:each="i : ${#numbers.sequence(0, reservationPage.getTotalPages() - 1)}"
+										class="page-item">
+										<span th:if="${i == reservationPage.getNumber()}"
+											class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>
+										<a th:unless="${i == reservationPage.getNumber()}"
+											th:href="@{/reservations(page = ${i})}"
+											class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
+									</li>
+									<li class="page-item">
+										<span th:if="${reservationPage.isLast()}" class="page-link disabled">›</span>
+										<a th:unless="${reservationPage.isLast()}"
+											th:href="@{/reservations(page = ${reservationPage.getNumber() + 1})}"
+											class="page-link nagoyameshi-page-link">›</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+	<script th:src="@{/js/reservation-modal.js}"></script>
+</body>
+
+</html>

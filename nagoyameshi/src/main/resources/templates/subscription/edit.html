@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>お支払い方法</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container pb-5 nagoyameshi-container">
+				<div class="row justify-content-center">
+					<div class="col-xl-5 col-lg-6 col-md-8">
+						<nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+								<li class="breadcrumb-item active" aria-current="page">お支払い方法</li>
+							</ol>
+						</nav>
+
+						<h1 class="mb-3 text-center">お支払い方法</h1>
+
+						<div class="container mb-4">
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-3">
+									<span class="fw-bold">カード種別</span>
+								</div>
+
+								<div class="col">
+									<span th:text="${card.brand}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-3">
+									<span class="fw-bold">カード名義人</span>
+								</div>
+
+								<div class="col">
+									<span th:text="${cardHolderName}"></span>
+								</div>
+							</div>
+
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-3">
+									<span class="fw-bold">カード番号</span>
+								</div>
+
+								<div class="col">
+									<span th:text="${'**** **** **** ' + card.last4}"></span>
+								</div>
+							</div>
+						</div>
+
+						<form id="cardForm" method="post" th:action="@{/subscription/update}">
+							<div id="cardHolderNameError"></div>
+							<input class="nagoyameshi-card-holder-name mb-3" id="cardHolderName" type="text"
+								placeholder="カード名義人" required>
+
+							<div id="cardElementError"></div>
+							<div class="nagoyameshi-card-element mb-4" id="cardElement"></div>
+						</form>
+						<div class="d-flex justify-content-center">
+							<button class="btn text-white shadow-sm w-50 nagoyameshi-btn" id="cardButton">変更</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+	<script src="https://js.stripe.com/v3"></script>
+	<script th:src="@{/js/stripe.js}"></script>
+</body>
+
+</html>

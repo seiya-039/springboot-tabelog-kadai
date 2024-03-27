@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>店舗詳細</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container py-4 nagoyameshi-container">
+				<div class="row justify-content-center">
+
+					<!-- 店舗の削除用モーダル -->
+					<div class="modal fade" id="deleteRestaurantModal" tabindex="-1"
+						aria-labelledby="deleteRestaurantModalLabel">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="deleteRestaurantModalLabel"
+										th:text="${'「' + restaurant.getName() + '」を削除してもよろしいですか？'}"></h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="閉じる"></button>
+								</div>
+								<div class="modal-footer">
+									<form method="post"
+										th:action="@{/admin/restaurants/__${restaurant.getId()}__/delete}">
+										<button type="submit"
+											class="btn text-white shadow-sm nagoyameshi-btn-danger">削除</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col container">
+						<div class="row justify-content-center">
+							<div class="col-xl-7 col-lg-8 col-md-9">
+								<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+									<ol class="breadcrumb mb-0">
+										<li class="breadcrumb-item"><a th:href="@{/admin/restaurants}">店舗一覧</a></li>
+										<li class="breadcrumb-item active" aria-current="page">店舗詳細</li>
+									</ol>
+								</nav>
+
+								<h1 class="mb-4 text-center" th:text="${restaurant.getName()}"></h1>
+
+								<div class="d-flex justify-content-end align-items-end mb-3">
+									<div>
+										<a th:href="@{/admin/restaurants/__${restaurant.getId()}__/edit}"
+											class="me-2">編集</a>
+										<a href="#" class="link-secondary" data-bs-toggle="modal"
+											data-bs-target="#deleteRestaurantModal">削除</a>
+									</div>
+								</div>
+
+								<div class="mb-2" th:if="${restaurant.getImage()}">
+									<img th:src="@{/storage/__${restaurant.getImage()}__}" class="w-100" alt="店舗画像">
+								</div>
+
+								<div class="container mb-4">
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">ID</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${restaurant.getId()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">店舗名</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${restaurant.getName()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">説明</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${restaurant.getDescription()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">価格帯</span>
+										</div>
+
+										<div class="col">
+											<span
+												th:text="${#numbers.formatInteger(restaurant.getLowestPrice(), 1, 'COMMA') + '～' + #numbers.formatInteger(restaurant.getHighestPrice(), 1, 'COMMA') + '円'}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">郵便番号</span>
+										</div>
+
+										<div class="col">
+											<span
+												th:text="${#strings.substring(restaurant.getPostalCode(), 0, 3) + '-' + #strings.substring(restaurant.getPostalCode(), 3)}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">住所</span>
+										</div>
+
+										<div class="col">
+											<span th:text="${restaurant.getAddress()}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">営業時間</span>
+										</div>
+
+										<div class="col">
+											<span
+												th:text="${#temporals.format(restaurant.getOpeningTime(), 'H:mm') + '～' + #temporals.format(restaurant.getClosingTime(), 'H:mm')}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">定休日</span>
+										</div>
+
+										<div class="col d-flex">
+											<div th:unless="${regularHolidayRestaurants.isEmpty()}">
+												<span
+													th:each="regularHolidayRestaurant, stat : ${regularHolidayRestaurants}"
+													th:if="${stat.first}"
+													th:text="${regularHolidayRestaurant.getRegularHoliday().getDay()}"></span><span
+													th:each="regularHolidayRestaurant, stat : ${regularHolidayRestaurants}"
+													th:unless="${stat.first}"
+													th:text="${'、' + regularHolidayRestaurant.getRegularHoliday().getDay()}"></span>
+											</div>
+											<div th:if="${regularHolidayRestaurants.isEmpty()}">
+												<span>年中無休</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">座席数</span>
+										</div>
+
+										<div class="col">
+											<span
+												th:text="${#numbers.formatInteger(restaurant.getSeatingCapacity(), 1, 'COMMA') + '席'}"></span>
+										</div>
+									</div>
+
+									<div class="row pb-2 mb-2 border-bottom">
+										<div class="col-2">
+											<span class="fw-bold">カテゴリ</span>
+										</div>
+
+										<div class="col d-flex">
+											<div th:unless="${categoryRestaurants.isEmpty()}">
+												<span th:each="categoryRestaurant, stat : ${categoryRestaurants}"
+													th:if="${stat.first}"
+													th:text="${categoryRestaurant.getCategory().getName()}"></span><span
+													th:each="categoryRestaurant, stat : ${categoryRestaurants}"
+													th:unless="${stat.first}"
+													th:text="${'、' + categoryRestaurant.getCategory().getName()}"></span>
+											</div>
+											<div th:if="${categoryRestaurants.isEmpty()}">
+												<span>未設定</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>

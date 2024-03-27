@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>レビュー編集</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container nagoyameshi-container pb-5">
+				<div class="row justify-content-center">
+					<div class="col-xxl-6 col-xl-7 col-lg-8 col-md-10">
+						<nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+								<li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
+								<li class="breadcrumb-item"><a
+										th:href="@{/restaurants/__${restaurant.getId()}__}">店舗詳細</a></li>
+								<li class="breadcrumb-item"><a
+										th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">レビュー</a></li>
+								<li class="breadcrumb-item active" aria-current="page">レビュー編集</li>
+							</ol>
+						</nav>
+
+						<h1 class="mb-2 text-center" th:text="${restaurant.getName()}"></h1>
+
+						<p class="text-center">
+							<span class="nagoyameshi-star-rating me-1"
+								th:data-rate="${restaurant.getRoundedAverageScore()}"></span>
+							<span th:text="${restaurant.getFormattedAverageScore()}"></span><span
+								th:text="${'（' + restaurant.getReviews().size() + '件）'}"></span>
+						</p>
+
+						<ul class="nav nav-tabs mb-3">
+							<li class="nav-item">
+								<a class="nav-link link-dark"
+									th:href="@{/restaurants/__${restaurant.getId()}__}">トップ</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link link-dark"
+									th:href="@{/restaurants/__${restaurant.getId()}__/reservations/register}">予約</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active text-white nagoyameshi-bg" aria-current="page"
+									th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">レビュー</a>
+							</li>
+						</ul>
+
+						<form th:method="post"
+							th:action="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/update}"
+							th:object="${reviewEditForm}">
+							<input type="hidden" th:field="*{id}">
+
+							<div class="mb-3">
+								<label class="form-label text-md-left fw-bold">評価</label>
+								<div th:if="${#fields.hasErrors('score')}" class="text-danger small mb-2"
+									th:errors="*{score}"></div>
+
+								<div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" id="score1" type="radio" value="1"
+											th:field="*{score}">
+										<label class="form-check-label" for="score1">1</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" id="score2" type="radio" value="2"
+											th:field="*{score}">
+										<label class="form-check-label" for="score2">2</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" id="score3" type="radio" value="3"
+											th:field="*{score}">
+										<label class="form-check-label" for="score3">3</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" id="score4" type="radio" value="4"
+											th:field="*{score}">
+										<label class="form-check-label" for="score4">4</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" id="score5" type="radio" value="5"
+											th:field="*{score}" checked>
+										<label class="form-check-label" for="score5">5</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="mb-4">
+								<label for="content" class="form-label text-md-left fw-bold">感想</label>
+								<div th:if="${#fields.hasErrors('content')}" class="text-danger small mb-2"
+									th:errors="*{content}"></div>
+
+								<div>
+									<textarea class="form-control" cols="30" rows="5" th:field="*{content}"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group d-flex justify-content-center mb-4">
+								<button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">更新</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>

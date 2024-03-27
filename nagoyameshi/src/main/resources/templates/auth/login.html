@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>ログイン</title>
+</head>
+
+<body>
+	<div class="nagoyameshi-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container py-4 nagoyameshi-container">
+				<div class="row justify-content-center">
+					<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">
+						<h1 class="mb-4 text-center">ログイン</h1>
+
+						<hr class="mb-4">
+
+						<div th:if="${param.error}" class="alert alert-danger">
+							メールアドレスまたはパスワードが正しくありません。
+						</div>
+
+						<form th:action="@{/login}" method="post">
+							<div class="form-group mb-3">
+								<input type="text" class="form-control" name="username" required autocomplete="email"
+									placeholder="メールアドレス" autofocus>
+							</div>
+							<div class="form-group mb-3">
+								<input type="password" class="form-control" name="password" required
+									autocomplete="new-password" placeholder="パスワード">
+							</div>
+
+							<div class="form-group d-flex justify-content-center my-4">
+								<button type="submit"
+									class="btn text-white shadow-sm w-100 nagoyameshi-btn">ログイン</button>
+							</div>
+						</form>
+
+						<hr class="my-4">
+
+						<div class="text-center">
+							<a th:href="@{/signup}">
+								新規会員登録はこちら
+							</a>
+						</div>
+						<div class="text-center">
+							<a th:href="@{/reset}">
+								パスワードを忘れた場合はこちら
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>
