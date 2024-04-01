@@ -124,20 +124,22 @@ public class RestaurantController {
 				.findByRestaurantOrderByRegularHoliday_IdAsc(restaurant);
 		List<CategoryRestaurant> categoryRestaurants = categoryRestaurantRepository
 				.findByRestaurantOrderByIdAsc(restaurant);
-		User user = userDetailsImpl.getUser();
+		
+		if (userDetailsImpl != null) {
+			User user = userDetailsImpl.getUser();
 
-		isFavorite = favoriteService.isFavorite(restaurant, user);
-		if (isFavorite) {
-			favorite = favoriteRepository.findByRestaurantAndUser(restaurant, user);
-		}
+			isFavorite = favoriteService.isFavorite(restaurant, user);
+			if (isFavorite) {
+				favorite = favoriteRepository.findByRestaurantAndUser(restaurant, user);
+			}
+			}
+			model.addAttribute("restaurant", restaurant);
+			model.addAttribute("favorite", favorite);
+			model.addAttribute("regularHolidayRestaurants", regularHolidayRestaurants);
+			model.addAttribute("categoryRestaurants", categoryRestaurants);
+			model.addAttribute("isFavorite", isFavorite);
 
-		model.addAttribute("restaurant", restaurant);
-		model.addAttribute("favorite", favorite);
-		model.addAttribute("regularHolidayRestaurants", regularHolidayRestaurants);
-		model.addAttribute("categoryRestaurants", categoryRestaurants);
-		model.addAttribute("isFavorite", isFavorite);
-
-		return "restaurants/show";
+			return "restaurants/show";
 	}
 
 	private List<Integer> generatePriceList(Integer min, Integer max, Integer unit) {
